@@ -24,24 +24,99 @@
 		<ul>
 			<li data-ng-repeat="item in items | orderBy: 'name' | filter: searchName">{{item.name}} / {{item.location}}</li>
 		</ul>
+		<button data-ng-click="getQueue()">get data</button>
 	</div>
-		
+	
 
 	<script src="lib/bower_components/angular/angular.js"></script>
 	<script src="lib/bower_components/angular-route/angular-route.min.js"></script>
 	<script src="lib/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
 	<script>
 		var SimpleApp = angular.module("SimpleApp", ['ui.bootstrap']);
-		
-		function appController($scope) {
-			$scope.items = [
-											{name: "name 1", location: "location 1"},
-											{name: "name 3", location: "location 3"},
-											{name: "name 2", location: "location 2"}
-											];
-		};
 	
-		SimpleApp.controller("appController", appController);
+		function get_queue() {
+			var service_url = "http://localhost:8888/rest";
+			var request_obj = {
+				"meta": {
+					"version": "0.0.1",
+					"content-type": "image/tiff",
+					"limit": 10,
+					"start": 0,
+					"store": "queue",
+					"width": 106,
+					"height": 150,
+					"action": "list",
+					"parameter": {}
+				}
+			};
+			
+			$http({
+					method: 'POST',
+					url: service_url,
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					data: request_obj
+				}).then(function successCallback(response) {
+					// this callback will be called asynchronously
+					// when the response is available
+					console.log(response.data)
+				}, function errorCallback(response) {
+					// called asynchronously if an error occurs
+					// or server returns response with an error status.
+					console.log("request Failed")
+					console.log(response)
+			});
+			
+		}
+
+	function appController($scope, $http) {
+		$scope.queue = []
+		$scope.items = [
+			{name: "name 1", location: "location 1"},
+			{name: "name 3", location: "location 3"},
+			{name: "name 2", location: "location 2"}
+		];
+									
+		$scope.getQueue = function() {
+			var service_url = "http://localhost:8888/rest";
+			var request_obj = {
+				"meta": {
+					"version": "0.0.1",
+					"content-type": "image/tiff",
+					"limit": 10,
+					"start": 0,
+					"store": "queue",
+					"width": 106,
+					"height": 150,
+					"action": "list",
+					"parameter": {}
+				}
+			};
+			
+			$http({
+				method: 'GET',
+				url: service_url,
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				data: request_obj
+			}).then(function successCallback(response) {
+				// this callback will be called asynchronously
+				// when the response is available
+				console.log(response.data)
+			}, function errorCallback(response) {
+				// called asynchronously if an error occurs
+				// or server returns response with an error status.
+				console.log("request Failed")
+				console.log(response)
+			});
+		}
+	};
+	
+	SimpleApp.controller("appController", appController);
 	</script>
 </body>
 </html>
