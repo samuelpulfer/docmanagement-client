@@ -1,29 +1,47 @@
 <!DOCTYPE html>
 <!--
-License: GPL2
-Author: Simon Wunderlin
-Copyright, 2015, simon Wunderlin
--->
+ License: GPL2
+ Author: Simon Wunderlin
+ Copyright, 2015, simon Wunderlin
+ -->
 <html data-ng-app="SimpleApp" lang="en">
-<head>
-	<title>Minimal Angual1 App</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="lib/bower_components/bootstrap-css/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-	<style>
-		.sortorder:after {
-			content: '\25b2';
-		}
-		.sortorder.reverse:after {
-			content: '\25bc';
-		}
-	</style>
-</head>
-<body>
-	<div data-ng-view></div>
+	<head>
+		<title>Minimal Angual1 App</title>
+		<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="lib/bower_components/bootstrap-css/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+				</head>
+	<body>
+	<div data-ng-controller="appController" class="container-fluid">
+		
+		<form class="form-inline">
+			<div class="form-group">
+				<label for="searchName">Name</label>
+				<input type="text" id="searchName" data-ng-model="searchName" class="form-control" placeholder="Search">
+					</div> {{searchName}}
+		</form>
+		
+		<ul>
+			<li data-ng-repeat="item in items | orderBy: 'name' | filter: searchName">{{item.name}} / {{item.location}}</li>
+		</ul>
+	</div>
+		
+
 	<script src="lib/bower_components/angular/angular.js"></script>
 	<script src="lib/bower_components/angular-route/angular-route.min.js"></script>
 	<script src="lib/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
-	<script src="simpleapp.js"></script>
+	<script>
+		var SimpleApp = angular.module("SimpleApp", ['ui.bootstrap']);
+		
+		function appController($scope) {
+			$scope.items = [
+											{name: "name 1", location: "location 1"},
+											{name: "name 3", location: "location 3"},
+											{name: "name 2", location: "location 2"}
+											];
+		};
+	
+		SimpleApp.controller("appController", appController);
+	</script>
 </body>
 </html>
