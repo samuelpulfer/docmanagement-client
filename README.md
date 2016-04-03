@@ -11,3 +11,6 @@
 	npm install
 	bower install
 
+## run the development server
+	npm start
+
